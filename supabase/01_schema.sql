@@ -1,6 +1,3 @@
--- One More Candle — gifts table
--- Run this in Supabase SQL Editor
-
 create extension if not exists "pgcrypto";
 
 create table if not exists public.gifts (
@@ -25,9 +22,8 @@ create policy "public read gifts"
   on public.gifts for select
   using (true);
 
--- Anyone can create a gift (no accounts in V1)
+-- Anyone can create a gift (no accounts)
 create policy "public insert gifts"
   on public.gifts for insert
   with check (true);
 
--- No update/delete policy = nobody can modify or delete via the client. Good for a gift.
