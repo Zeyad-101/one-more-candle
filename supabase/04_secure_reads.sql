@@ -1,16 +1,3 @@
--- One More Candle — secure reads
--- Run this in Supabase SQL Editor AFTER 01/02/03 have already been run.
---
--- Problem this fixes: the earlier "public read gifts" RLS policy + the
--- anon SELECT grant together let anyone with the anon key query the whole
--- gifts table (supabase.from('gifts').select('*')) and see every friend's
--- name, message, and photos — not just the one gift they have a link to.
---
--- Fix: remove anon's direct SELECT access entirely, and replace it with a
--- SECURITY DEFINER function that only ever returns the single row matching
--- an exact id you already have. Insert stays open (unchanged) so the
--- creator flow keeps working.
-
 -- 1. Remove anon's ability to read the table directly.
 revoke select on public.gifts from anon;
 
