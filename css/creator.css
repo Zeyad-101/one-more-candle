@@ -1,4 +1,3 @@
-/* Hallmark · creator form · macrostructure: form-with-overlay · tone: warm-playful · anchor hue: raspberry */
 
 /* ---------- Layout ---------- */
 
@@ -34,9 +33,6 @@
 
 /* ---------- Fieldsets / sections ---------- */
 
-/* Each section reads as a quiet card: a barely-there background + thin
-   border + inner padding gives the eye a place to rest between dense
-   fields. Keeps the form readable without feeling boxy. */
 .form-section {
   border: 1px solid rgba(255, 248, 240, 0.09);
   margin: 0;
