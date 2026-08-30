@@ -48,9 +48,6 @@ button {
     gap: 20px;
   }
 
-  /* The cake tiers at their natural widths fit a desktop comfortably but
-     push close to the edges on a 375px viewport — a little extra breathing
-     room keeps it from feeling cramped. */
   .cake-wrap {
     padding: 0 4px;
   }
