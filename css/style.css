@@ -1,0 +1,524 @@
+/* ---------- Tokens ---------- */
+:root {
+  --omc-indigo: #241e4e;
+  --omc-indigo-deep: #161233;
+  --omc-coral: #ff9166;
+  --omc-buttercream: #ffe8c7;
+  --omc-mint: #8fd9b6;
+  --omc-raspberry: #ff6f91;
+  --omc-cream-white: #fff8f0;
+  --font-display: "Baloo 2", cursive;
+  --font-body: "Nunito", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--omc-indigo-deep);
+  color: var(--omc-cream-white);
+  font-family: var(--font-body);
+}
+
+button {
+  font-family: var(--font-display);
+  border: none;
+  cursor: pointer;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 480px) {
+  .stage {
+    padding: 48px 16px;
+    gap: 20px;
+  }
+
+  /* The cake tiers at their natural widths fit a desktop comfortably but
+     push close to the edges on a 375px viewport — a little extra breathing
+     room keeps it from feeling cramped. */
+  .cake-wrap {
+    padding: 0 4px;
+  }
+}
+
+/* ---------- Scene / background ---------- */
+.scene {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+}
+
+.scene.theme-sunset {
+  background: linear-gradient(180deg, #241e4e 0%, #4a3b7a 45%, #ff9166 100%);
+}
+.scene.theme-night {
+  background: linear-gradient(180deg, #0f0c29 0%, #161233 60%, #241e4e 100%);
+}
+.scene.theme-pastel {
+  background: linear-gradient(180deg, #2a2450 0%, #6c5b9e 55%, #f0e6ff 100%);
+}
+
+.sparkle-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.sparkle {
+  position: absolute;
+  border-radius: 50%;
+  background: #fff;
+  animation: omc-twinkle 3s ease-in-out infinite;
+}
+
+@keyframes omc-twinkle {
+  0%,
+  100% {
+    opacity: 0.15;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.6);
+  }
+}
+
+/* ---------- Stages ---------- */
+.stage {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 24px;
+  padding: 64px 16px;
+  opacity: 0;
+}
+
+.stage.active {
+  display: flex;
+  animation: omc-fade-in 0.5s ease-out forwards;
+}
+
+@keyframes omc-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.omc-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+
+/* Primary CTA — larger, heavier, lifts on hover. */
+.omc-btn {
+  margin-top: 8px;
+  padding: 16px 36px;
+  border-radius: 999px;
+  font-size: 1.15rem;
+  font-weight: 700;
+  font-family: var(--font-display);
+  color: var(--omc-cream-white);
+  background: var(--omc-raspberry);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25), inset 0 -2px 0 rgba(0, 0, 0, 0.12);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+.omc-btn:hover:not(:disabled):not(.is-loading) {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.32), inset 0 -2px 0 rgba(0, 0, 0, 0.12);
+  background: #ff5a82;
+}
+.omc-btn:focus-visible {
+  outline: 3px solid rgba(255, 145, 102, 0.6);
+  outline-offset: 3px;
+}
+.omc-btn:active:not(:disabled):not(.is-loading) {
+  transform: scale(0.96);
+}
+/* Secondary CTA — quieter, framed with a thin border so it reads as a
+   step-back / alternative next to the primary. */
+.omc-btn.mint {
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  background: var(--omc-mint);
+  color: var(--omc-indigo-deep);
+  border: 1px solid rgba(34, 30, 78, 0.18);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+.omc-btn.mint:hover:not(:disabled):not(.is-loading) {
+  background: #a7e3c4;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.26);
+}
+.omc-btn.mint:focus-visible {
+  outline: 3px solid rgba(143, 217, 182, 0.7);
+  outline-offset: 3px;
+}
+
+/* ---------- Cake (sequenced build) ---------- */
+.cake-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  user-select: none;
+}
+
+/* cake-fall is the shake container now — pieces animate individually inside. */
+.cake-fall {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Each tier + the candle starts off-screen above and only animates in
+   once JS adds .fall-active. JS chains them via animationend. */
+.tier,
+.candle {
+  opacity: 0;
+  transform: translateY(-260px) rotate(-5deg);
+}
+
+.tier.fall-active,
+.candle.fall-active {
+  animation: omc-piece-fall 0.38s cubic-bezier(0.34, 1.18, 0.64, 1) forwards;
+}
+
+@keyframes omc-piece-fall {
+  0% {
+    opacity: 0;
+    transform: translateY(-260px) rotate(-5deg);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+  }
+  85% {
+    transform: translateY(-10px) rotate(2deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
+.cake-shake {
+  animation: omc-shake 0.5s ease-in-out;
+}
+@keyframes omc-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-8px);
+  }
+  40% {
+    transform: translateX(8px);
+  }
+  60% {
+    transform: translateX(-6px);
+  }
+  80% {
+    transform: translateX(6px);
+  }
+}
+
+.cake-shadow {
+  margin-top: 8px;
+  height: 12px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.3);
+  filter: blur(2px);
+  width: 60px;
+  transition: width 0.5s ease-out;
+}
+.cake-shadow.landed {
+  width: 185px;
+}
+
+/* Candle */
+.candle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  margin-bottom: -6px;
+  z-index: 2;
+}
+
+.flame {
+  width: 10px;
+  height: 16px;
+  margin-bottom: -2px;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  background: radial-gradient(circle at 50% 70%, #ffe8c7 0%, #ff9166 55%, #ff6f91 100%);
+  box-shadow: 0 0 12px 3px rgba(255, 145, 102, 0.6);
+  transform-origin: 50% 100%;
+  /* Hidden until the candle finishes falling and JS adds .ignite. */
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+/* Light the flame: pop in (slight overshoot) then settle into the flicker. */
+.flame.ignite {
+  animation: omc-flame-ignite 0.32s cubic-bezier(0.34, 1.5, 0.64, 1) forwards,
+             omc-flicker 0.9s ease-in-out 0.34s infinite;
+}
+
+@keyframes omc-flame-ignite {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes omc-flicker {
+  0%,
+  100% {
+    transform: scale(1) rotate(-2deg);
+  }
+  50% {
+    transform: scale(1.08) rotate(2deg);
+  }
+}
+
+.flame.out {
+  opacity: 0;
+  transform: scale(0) translateY(-6px);
+  animation: none;
+}
+
+.smoke-puff {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  filter: blur(2px);
+  opacity: 0.8;
+  animation: omc-smoke 0.9s ease-out forwards;
+  pointer-events: none;
+}
+@keyframes omc-smoke {
+  to {
+    opacity: 0;
+    transform: translateY(-18px) scale(1.4);
+  }
+}
+
+.wick {
+  width: 6px;
+  height: 26px;
+  border-radius: 2px;
+  background: var(--omc-buttercream);
+}
+.wick.spiral {
+  background: repeating-linear-gradient(45deg, #ff6f91 0 4px, #fff8f0 4px 8px);
+}
+.wick.star {
+  background: var(--omc-mint);
+}
+
+/* ---------- Scrapbook ---------- */
+.scrapbook {
+  width: 100%;
+  max-width: 760px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 6px;
+  padding: 24px 16px;
+}
+
+.photo-card {
+  position: relative;
+  width: 150px;
+  background: var(--omc-cream-white);
+  padding: 8px 8px 26px;
+  border-radius: 2px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  transform: scale(0.5);
+  animation: omc-pop-in 0.6s cubic-bezier(0.2, 0.8, 0.3, 1.2) forwards;
+  transition: transform 0.2s ease;
+}
+.photo-card:hover {
+  transform: scale(1.06) rotate(0deg) !important;
+  z-index: 5;
+}
+
+.photo-card:focus-visible {
+  outline: 3px solid var(--omc-coral);
+  outline-offset: 3px;
+}
+
+.photo-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 1px;
+  display: block;
+}
+
+.photo-caption {
+  position: absolute;
+  bottom: 4px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: var(--omc-indigo-deep);
+  font-size: 0.75rem;
+  padding: 0 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.entrance-0 {
+  animation-name: omc-in-left;
+}
+.entrance-1 {
+  animation-name: omc-pop-in;
+}
+.entrance-2 {
+  animation-name: omc-in-top;
+}
+.entrance-3 {
+  animation-name: omc-in-right;
+}
+.entrance-4 {
+  animation-name: omc-pop-in;
+}
+
+@keyframes omc-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-80px) rotate(-12deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) rotate(-4deg);
+  }
+}
+@keyframes omc-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(80px) rotate(10deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) rotate(5deg);
+  }
+}
+@keyframes omc-in-top {
+  from {
+    opacity: 0;
+    transform: translateY(-100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(-6deg);
+  }
+}
+@keyframes omc-pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.3) rotate(20deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(3deg);
+  }
+}
+
+/* Modal */
+.photo-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 24px;
+}
+.photo-modal.active {
+  display: flex;
+  animation: omc-fade-in 0.2s ease-out;
+}
+.photo-modal-card {
+  background: var(--omc-cream-white);
+  border-radius: 6px;
+  padding: 12px 12px 20px;
+  max-width: 380px;
+  width: 100%;
+}
+.photo-modal-card img {
+  width: 100%;
+  max-height: 65vh;
+  object-fit: cover;
+  border-radius: 2px;
+  display: block;
+}
+.photo-modal-caption {
+  text-align: center;
+  color: var(--omc-indigo-deep);
+  margin-top: 12px;
+  font-family: var(--font-body);
+}
+.photo-modal-close {
+  display: block;
+  margin: 12px auto 0;
+  background: none;
+  color: rgba(22, 18, 51, 0.6);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  padding: 6px 12px;
+  border-radius: 999px;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+.photo-modal-close:hover {
+  color: var(--omc-indigo-deep);
+  background: rgba(22, 18, 51, 0.06);
+}
+.photo-modal-close:focus-visible {
+  outline: 2px solid var(--omc-coral);
+  outline-offset: 2px;
+}

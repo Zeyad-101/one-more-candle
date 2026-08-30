@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>One More Candle — A gift for you</title>
+  <meta name="description" content="Send a personalized birthday surprise to a friend." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8E%82%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.4/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+  <div id="app"></div>
+
+  <script type="module">
+    import { mountRecipientExperience } from "./js/recipient.js";
+    import { supabase } from "./js/supabaseClient.js";
+
+    const id = new URLSearchParams(location.search).get("id");
+
+    if (!id) {
+      renderNotFound();
+    } else {
+      loadGift(id);
+    }
+
+    async function loadGift(id) {
+      const root = document.getElementById("app");
+      root.className = "scene theme-sunset";
+      root.innerHTML = `
+        <p class="omc-title" style="font-size:1.4rem;">Loading your gift…</p>
+      `;
+
+      try {
+        // go through the get_gift RPC, not direct table access — anon no
+        // longer has SELECT on gifts (see supabase/04_secure_reads.sql).
+        // The function returns setof gifts, so the result is an array; take
+        // the first row if present, treat empty as not-found.
+        const { data, error } = await supabase.rpc("get_gift", { p_id: id });
+        const gift = Array.isArray(data) ? data[0] : null;
+
+        if (error || !gift) {
+          renderNotFound();
+          return;
+        }
+
+        root.className = "";
+        root.innerHTML = "";
+        mountRecipientExperience(root, gift);
+      } catch (err) {
+        renderNotFound();
+      }
+    }
+
+    function renderNotFound() {
+      const root = document.getElementById("app");
+      root.className = "scene theme-sunset";
+      root.innerHTML = `
+        <div style="display:flex; flex-direction:column; align-items:center; gap:16px; padding:64px 16px; text-align:center;">
+          <p class="omc-title" style="font-size:1.6rem; max-width:340px;">This gift link doesn't exist or has expired.</p>
+          <p style="color:rgba(255,248,240,0.7); max-width:320px;">
+            Double-check the link, or ask whoever sent it to send it again.
+          </p>
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>

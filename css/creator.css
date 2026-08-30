@@ -1,0 +1,437 @@
+/* Hallmark · creator form · macrostructure: form-with-overlay · tone: warm-playful · anchor hue: raspberry */
+
+/* ---------- Layout ---------- */
+
+.creator {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 56px 20px 96px;
+}
+
+.creator-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.creator-header h1 {
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  margin: 0 0 8px;
+  color: var(--omc-cream-white);
+}
+
+.creator-subtitle {
+  margin: 0;
+  color: rgba(255, 248, 240, 0.7);
+  font-size: 1rem;
+}
+
+.creator-form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px; /* tightened — sections now carry their own inner padding */
+}
+
+/* ---------- Fieldsets / sections ---------- */
+
+/* Each section reads as a quiet card: a barely-there background + thin
+   border + inner padding gives the eye a place to rest between dense
+   fields. Keeps the form readable without feeling boxy. */
+.form-section {
+  border: 1px solid rgba(255, 248, 240, 0.09);
+  margin: 0;
+  padding: 22px 22px 24px;
+  min-width: 0;
+  background: rgba(255, 248, 240, 0.035);
+  border-radius: 16px;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.18) inset;
+}
+
+.form-section legend {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.35rem;
+  padding: 0;
+  margin-bottom: 16px;
+  color: var(--omc-cream-white);
+  width: 100%;
+}
+
+/* ---------- Fields ---------- */
+
+.field {
+  display: block;
+  margin-bottom: 14px;
+}
+
+.field:last-child {
+  margin-bottom: 0;
+}
+
+.field-label {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.88rem;
+  letter-spacing: 0.02em;
+  margin-bottom: 8px;
+  color: rgba(255, 248, 240, 0.9);
+}
+
+.optional {
+  font-weight: 400;
+  color: rgba(255, 248, 240, 0.5);
+  font-size: 0.85rem;
+}
+
+.field-hint {
+  display: inline-block;
+  margin-left: 12px;
+  font-size: 0.9rem;
+  color: rgba(255, 248, 240, 0.55);
+}
+
+input[type="text"],
+textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 248, 240, 0.18);
+  background: rgba(255, 248, 240, 0.06);
+  color: var(--omc-cream-white);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.4;
+  outline: none;
+  transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+
+input[type="text"]:focus,
+textarea:focus {
+  border-color: var(--omc-coral);
+  background: rgba(255, 248, 240, 0.1);
+}
+
+/* Keyboard focus needs a visible ring, not just a border swap (some
+   browsers don't differentiate :focus from :focus-visible otherwise). */
+input[type="text"]:focus-visible,
+textarea:focus-visible {
+  border-color: var(--omc-coral);
+  background: rgba(255, 248, 240, 0.1);
+  box-shadow: 0 0 0 3px rgba(255, 145, 102, 0.35);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 110px;
+  line-height: 1.5;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: rgba(255, 248, 240, 0.35);
+}
+
+/* ---------- Preset chips (radio groups) ---------- */
+
+.preset-grid {
+  margin-bottom: 18px;
+}
+
+.preset-grid:last-child {
+  margin-bottom: 0;
+}
+
+.preset-label {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1rem;
+  margin: 0 0 8px;
+  color: rgba(255, 248, 240, 0.82);
+}
+
+.preset-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Idle chips need to look tappable, not invisible. Bumped the background
+   and border opacity so unselected options are obvious buttons. */
+.preset-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: rgba(255, 248, 240, 0.12);
+  border: 1px solid rgba(255, 248, 240, 0.28);
+  color: var(--omc-cream-white);
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+  user-select: none;
+}
+
+.preset-chip:hover {
+  background: rgba(255, 248, 240, 0.2);
+  border-color: rgba(255, 248, 240, 0.45);
+}
+
+.preset-chip:focus-within {
+  outline: 3px solid rgba(255, 145, 102, 0.5);
+  outline-offset: 2px;
+}
+
+.preset-chip:active {
+  transform: scale(0.97);
+}
+
+/* Selected = the primary accent (raspberry) + a faint outer glow so
+   it reads as "the choice" from across the screen, not just "the
+   slightly darker chip". */
+.preset-chip.selected {
+  background: var(--omc-raspberry);
+  border-color: var(--omc-raspberry);
+  color: var(--omc-cream-white);
+  box-shadow: 0 0 0 3px rgba(255, 111, 145, 0.28), 0 4px 12px rgba(255, 111, 145, 0.3);
+  transform: translateY(-1px);
+}
+
+.preset-chip input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+  height: 0;
+  margin: 0;
+}
+
+/* ---------- Photo list ---------- */
+
+.photo-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.photo-list:empty {
+  display: none;
+}
+
+.photo-item {
+  background: rgba(255, 248, 240, 0.05);
+  border: 1px solid rgba(255, 248, 240, 0.12);
+  border-radius: 12px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+}
+
+.photo-thumb {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.photo-caption-input {
+  font-size: 0.9rem;
+  padding: 8px 10px;
+}
+
+.photo-remove {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.6);
+  color: var(--omc-cream-white);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  backdrop-filter: blur(4px);
+}
+
+.photo-remove:hover {
+  background: rgba(0, 0, 0, 0.85);
+}
+
+/* ---------- Actions ---------- */
+
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+.status-msg {
+  text-align: center;
+  margin: 4px 0 0;
+  min-height: 1.2em;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.status-msg:empty {
+  display: none;
+}
+
+.status-msg[data-kind="err"] {
+  color: var(--omc-coral);
+}
+
+.status-msg[data-kind="ok"] {
+  color: var(--omc-mint);
+}
+
+/* ---------- Preview overlay ---------- */
+
+.preview-root {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: var(--omc-indigo-deep);
+}
+
+.preview-root[hidden] {
+  display: none;
+}
+
+.preview-close {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 110;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.55);
+  color: var(--omc-cream-white);
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  backdrop-filter: blur(6px);
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.preview-close:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.preview-close:active {
+  transform: scale(0.94);
+}
+
+/* ---------- Button states ---------- */
+
+.omc-btn:disabled,
+.omc-btn.is-loading {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ---------- Success card ---------- */
+
+.success-card {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.success-card h2 {
+  font-family: var(--font-display);
+  font-size: 1.9rem;
+  margin: 0;
+  color: var(--omc-cream-white);
+}
+
+.success-hint {
+  margin: 0;
+  color: rgba(255, 248, 240, 0.7);
+  font-size: 1rem;
+}
+
+.link-row {
+  display: flex;
+  width: 100%;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.link-row input {
+  flex: 1;
+  font-size: 0.9rem;
+  font-family: var(--font-body);
+  text-overflow: ellipsis;
+}
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 480px) {
+  .creator {
+    padding: 36px 16px 72px;
+  }
+
+  .creator-header h1 {
+    font-size: 2rem;
+  }
+
+  /* Tighter section padding at narrow widths so form content gets the room. */
+  .form-section {
+    padding: 18px 18px 20px;
+    border-radius: 14px;
+  }
+
+  .form-section legend {
+    font-size: 1.2rem;
+  }
+
+  .preset-chip {
+    padding: 9px 14px;
+    font-size: 0.9rem;
+  }
+
+  /* Stack the two CTAs vertically on phones — side-by-side 50%-width
+     buttons get cramped and ambiguous at 375px. Primary on top so the
+     eye lands on the strongest action first. */
+  .form-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .form-actions .omc-btn {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .photo-list {
+    grid-template-columns: 1fr;
+  }
+
+  .link-row {
+    flex-direction: column;
+  }
+}

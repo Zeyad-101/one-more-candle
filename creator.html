@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>One More Candle — Make a gift</title>
+  <meta name="description" content="Send a personalized birthday surprise to a friend." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8E%82%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/creator.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.4/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+  <main class="creator">
+    <header class="creator-header">
+      <h1 class="omc-title">Make a birthday gift</h1>
+      <p class="creator-subtitle">Fill it in, preview it, then send the link.</p>
+    </header>
+
+    <form id="gift-form" class="creator-form" novalidate>
+      <fieldset class="form-section">
+        <legend>For whom?</legend>
+
+        <label class="field">
+          <span class="field-label">Friend's name</span>
+          <input type="text" name="friend_name" required placeholder="e.g. Alex" autocomplete="off" />
+        </label>
+
+        <label class="field">
+          <span class="field-label">Intro line <span class="optional">(optional)</span></span>
+          <input type="text" name="intro_text" placeholder="I made something for you." autocomplete="off" />
+        </label>
+      </fieldset>
+
+      <fieldset class="form-section">
+        <legend>Pick the cake</legend>
+        <div class="preset-grid" data-preset="flavor"></div>
+        <div class="preset-grid" data-preset="cream_style"></div>
+        <div class="preset-grid" data-preset="background_theme"></div>
+        <div class="preset-grid" data-preset="candle_style"></div>
+      </fieldset>
+
+      <fieldset class="form-section">
+        <legend>Memories</legend>
+        <label class="field">
+          <span class="field-label">Add photos <span class="optional">(optional — caption each one)</span></span>
+          <input type="file" id="photo-input" accept="image/*" multiple hidden />
+          <button type="button" class="omc-btn mint" id="add-photos-btn">Choose photos</button>
+          <span class="field-hint" id="photo-count">No photos yet</span>
+        </label>
+        <div class="photo-list" id="photo-list" aria-live="polite"></div>
+      </fieldset>
+
+      <fieldset class="form-section">
+        <legend>Your message</legend>
+
+        <label class="field">
+          <span class="field-label">Message</span>
+          <textarea name="message" required rows="5" placeholder="Another year of you being exactly the kind of friend the group chat doesn't deserve..."></textarea>
+        </label>
+
+        <label class="field">
+          <span class="field-label">Closing line <span class="optional">(optional)</span></span>
+          <input type="text" name="closing_line" placeholder="Here's to making more memories." autocomplete="off" />
+        </label>
+      </fieldset>
+
+      <div class="form-actions">
+        <button type="button" class="omc-btn mint" id="preview-btn">Preview</button>
+        <button type="button" class="omc-btn" id="generate-btn">Generate Gift</button>
+      </div>
+      <p class="status-msg" id="status-msg" role="status" aria-live="polite"></p>
+    </form>
+
+    <section id="success-card" class="success-card" hidden>
+      <h2 class="omc-title">Your gift is ready 🎁</h2>
+      <p class="success-hint">Share this link with your friend:</p>
+      <div class="link-row">
+        <input type="text" id="share-link" readonly aria-label="Shareable gift link" />
+        <button type="button" class="omc-btn mint" id="copy-btn">Copy</button>
+      </div>
+      <button type="button" class="omc-btn" id="reset-btn">Make another</button>
+    </section>
+  </main>
+
+  <div id="preview-root" class="preview-root" hidden>
+    <div id="preview-stage"></div>
+    <button type="button" class="preview-close" id="preview-close" aria-label="Close preview">✕</button>
+  </div>
+
+  <script type="module" src="js/creator.js"></script>
+</body>
+</html>
