@@ -9,7 +9,6 @@ A birthday gift you send instead of just saying happy birthday.
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)
 ![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=flat&logo=supabase&logoColor=white)
 ![Vercel](https://img.shields.io/badge/Vercel-000000?style=flat&logo=vercel&logoColor=white)
-![No build step](https://img.shields.io/badge/build%20step-none-lightgrey)
 
 ## What it is
 
